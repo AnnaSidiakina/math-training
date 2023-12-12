@@ -3,8 +3,8 @@ import { Operations } from "@/components";
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
+    <main className="flex min-h-screen flex-col items-center justify-center py-24 px-4">
+      <div className="mb-32 text-center flex justify-center items-center ">
         <Operations />
       </div>
     </main>

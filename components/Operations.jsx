@@ -1,7 +1,6 @@
 "use client";
 import React from "react";
 import { useState, useEffect } from "react";
-import { Button } from "@material-tailwind/react";
 
 export const Operations = () => {
   const [isClient, setIsClient] = useState(false);
@@ -98,32 +97,54 @@ export const Operations = () => {
     <>
       {isClient && (
         <div>
-          <p>Operations</p>
+          <div className="text-2xl">
+            <span className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mr-2 min-w-16">
+              {firstInt}
+            </span>
+            <span className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mr-2">
+              {operator ? "+" : "-"}
+            </span>
+            <span className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mr-2">
+              {secondtInt}
+            </span>
+            <span className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mr-2">
+              =
+            </span>
+            {/* <span className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+              {res}
+            </span> */}
+            <form onSubmit={handlenCheckButtonSubmit} className="inline">
+              <input
+                type="text"
+                onChange={handleInputChange}
+                value={inputValue}
+                className="border border-green-500 text-blue-500 font-bold py-2 px-4 rounded w-16 h-[100%] text-center mr-8"
+              ></input>
 
-          <div>
-            <span>{firstInt}</span>
-            <span>{operator ? "+" : "-"}</span>
-            <span>{secondtInt}</span>
-            <span>=</span>
-            <span>{res}</span>
-            <input
-              type="text"
-              onChange={handleInputChange}
-              value={inputValue}
-            ></input>
-            <form onSubmit={handlenCheckButtonSubmit}>
-              <button type="submit">Check</button>
-              {isAnswerChecked && (
-                <span>{isAnswerCorrect ? "correct" : "not correct"}</span>
+              {isAnswerChecked ? (
+                <span
+                  className={`${
+                    isAnswerCorrect ? "bg-green-500" : "bg-red-500"
+                  } text-white font-bold py-2 px-4 rounded-full`}
+                >
+                  {isAnswerCorrect ? "✔" : "𐄂"}
+                </span>
+              ) : (
+                <button
+                  type="submit"
+                  className="border border-blue-500 text-blue-500 font-bold py-2 px-4 rounded-full"
+                >
+                  ?
+                </button>
               )}
             </form>
           </div>
 
-          <div>
+          <div className="flex justify-end">
             <button
               type="button"
               onClick={handleClick}
-              className="bg-gradient-to-r from-green-400 to-blue-500 text-white font-bold py-2 px-4 rounded"
+              className="bg-gradient-to-r from-green-400 to-blue-500 text-white font-bold py-2 px-4 rounded mt-16 text-2xl"
             >
               Next
             </button>
