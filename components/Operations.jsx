@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import { useState, useEffect } from "react";
+import { Button } from "@material-tailwind/react";
 
 export const Operations = () => {
   const [isClient, setIsClient] = useState(false);
@@ -21,50 +22,76 @@ export const Operations = () => {
   const firstRandomInt = getRandomIntInclusive(min, max);
   const secondRandomInt = getRandomIntInclusive(min, max);
 
-  // addition
+  // operations
   const [res, setRes] = useState(null);
   const [firstInt, setFirstInt] = useState(null);
   const [secondtInt, setSecondInt] = useState(null);
-  const [operator, setOperator] = useState(false);
-  const result = firstRandomInt + secondRandomInt;
-  if (result <= 10) {
-    setRes(result);
-    setFirstInt(firstRandomInt);
-    setSecondInt(secondRandomInt);
-  }
+  const [operator, setOperator] = useState(true);
 
-  // substaction
-  const [resSubstr, setResSubstr] = useState(null);
-  const [firstIntSubstr, setFirstIntSubstr] = useState(null);
-  const [secondtIntSubstr, setSecondIntSubstr] = useState(null);
-  const resultSubstr = firstRandomInt - secondRandomInt;
-  if (resultSubstr >= 0) {
-    setResSubstr(resultSubstr);
-    setFirstIntSubstr(firstRandomInt);
-    setSecondIntSubstr(secondRandomInt);
+  function operate(first, second, randomOperator) {
+    switch (randomOperator) {
+      case true:
+        const addResult = first + second;
+        if (addResult <= 10) {
+          setRes(addResult);
+          setFirstInt(first);
+          setSecondInt(second);
+          setOperator(true);
+        }
+      case false:
+        const subsResult = first - second;
+        if (subsResult >= 0) {
+          setRes(subsResult);
+          setFirstInt(first);
+          setSecondInt(second);
+          setOperator(false);
+        }
+    }
   }
 
   // handle Next button click
-  const [click, setClick] = useState(false);
+  const [click, setClick] = useState(true);
   const handleClick = () => {
     setClick(true);
-    console.log("click");
+    setInputValue("");
+    setIsAnswerChecked(false);
   };
 
   // random operator
   const randomBoolean = () => Math.random() >= 0.5;
   const randomOperator = randomBoolean();
-  useEffect(() => {
-    setOperator(randomOperator);
-  }, [randomOperator]);
 
-  // handle addition check button submit
-  const handleAdditionCheckButtonSubmit = () => {
-    console.log("check addition");
+  // on the button Next is new operation
+  useEffect(() => {
+    if (click) {
+      operate(firstRandomInt, secondRandomInt, randomOperator);
+      setClick(false);
+    }
+  }, [click, firstRandomInt, secondRandomInt, randomOperator]);
+
+  // handle input
+  const [inputValue, setInputValue] = useState("");
+
+  const [isAnswerCorrect, setIsAnswerCorrect] = useState(false);
+  const [isAnswerChecked, setIsAnswerChecked] = useState(false);
+
+  // handle check button submit
+  const handlenCheckButtonSubmit = (e) => {
+    e.preventDefault();
+    setIsAnswerChecked(true);
+    if (Number(inputValue) === res) {
+      setIsAnswerCorrect(true);
+      console.log("yes");
+    } else {
+      console.log("no");
+      setIsAnswerCorrect(false);
+    }
   };
-  // handle substaction check button submit
-  const handleSubstractionCheckButtonSubmit = () => {
-    console.log("check substraction");
+
+  // handle input function
+  const handleInputChange = (e) => {
+    const fieldValue = e.target.value;
+    setInputValue(fieldValue);
   };
 
   return (
@@ -72,33 +99,32 @@ export const Operations = () => {
       {isClient && (
         <div>
           <p>Operations</p>
-          {operator ? (
-            <div>
-              <form onSubmit={handleAdditionCheckButtonSubmit}>
-                <span>{firstInt}</span>
-                <span>+</span>
-                <span>{secondtInt}</span>
-                <span>=</span>
-                <span>{res}</span>
-                <input type="text"></input>
-                <button type="submit">Check</button>
-              </form>
-            </div>
-          ) : (
-            <div>
-              <form onSubmit={handleSubstractionCheckButtonSubmit}>
-                <span>{firstIntSubstr}</span>
-                <span>-</span>
-                <span>{secondtIntSubstr}</span>
-                <span>=</span>
-                <span>{resSubstr}</span>
-                <input type="text"></input>
-                <button type="submit">Check</button>
-              </form>
-            </div>
-          )}
+
           <div>
-            <button type="button" onClick={handleClick}>
+            <span>{firstInt}</span>
+            <span>{operator ? "+" : "-"}</span>
+            <span>{secondtInt}</span>
+            <span>=</span>
+            <span>{res}</span>
+            <input
+              type="text"
+              onChange={handleInputChange}
+              value={inputValue}
+            ></input>
+            <form onSubmit={handlenCheckButtonSubmit}>
+              <button type="submit">Check</button>
+              {isAnswerChecked && (
+                <span>{isAnswerCorrect ? "correct" : "not correct"}</span>
+              )}
+            </form>
+          </div>
+
+          <div>
+            <button
+              type="button"
+              onClick={handleClick}
+              className="bg-gradient-to-r from-green-400 to-blue-500 text-white font-bold py-2 px-4 rounded"
+            >
               Next
             </button>
           </div>
